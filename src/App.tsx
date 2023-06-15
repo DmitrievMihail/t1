@@ -1,26 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { FC, useEffect, useState } from 'react';
 import './App.css';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
+import Table, {THeadTotal} from './components/Table';
+import headTotal from './mocks/head1.json';
 
-function App() {
+const App: FC = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Table head={headTotal as THeadTotal}>
+        <tr>
+          <td>Ячейка</td>
+        </tr>
+      </Table>
     </div>
   );
-}
+};
 
 export default App;

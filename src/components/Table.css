@@ -1,0 +1,12 @@
+table.MainTable {
+  border-collapse: collapse;
+}
+
+table.MainTable td{
+  border: 1px solid #ccc;
+}
+
+
+table.MainTable tr.head td, table.MainTable td.head{
+  background-color: #E1F3FC;
+}
