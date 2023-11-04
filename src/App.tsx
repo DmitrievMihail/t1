@@ -8,17 +8,17 @@ import tableHead from './mocks/head1.json';
 
 // import { useLocalStorage } from "@uidotdev/usehooks";
 
-const tbody: TBody = [
-  {'a': 5, 'b': 10},
-  {'a': 3},
-];
+const tbody: TBody = {
+  '5': {a: '1', b: '2', c: '3', d: '4'},
+  '8': {a: '3'},
+};
 // body={tbody as TBody}
 
 const App: FC = () => {
   // const [drawing, saveDrawing] = useLocalStorage("drawing", null);
   return (
     <div className="App">
-      <Table head={tableHead as THeadTotal} body={tbody as TBody} rotate>
+      <Table head={tableHead as THeadTotal} body={tbody as TBody}>
         <tr>
           <td>1</td>
           <td>2</td>

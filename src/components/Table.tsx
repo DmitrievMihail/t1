@@ -1,11 +1,12 @@
-import React, { ReactNode } from 'react';
+import React, { ReactElement } from 'react';
 import './Table.css';
 import parse from 'html-react-parser';
+import { objMap } from '../libs/objmap';
 
 /* eslint-disable */
 type THeadData = Array<string>;
 type THeadData2 = Array<THeadData>;
-export type TBody = Array<object>; // Array<string|number|null>
+export type TBody = {[index: string]: {[index: string]: string}}; // Array<string|number|null>
 
 export type THeadTotal = [
 	object,
@@ -21,7 +22,9 @@ const Table = ({children, head, rotate, body} : { children?: React.ReactElement,
 
 	// eslint-disable-next-line
 	const [fields, headData, headMerge, headDelete] = head;
+	// console.log(fields);
 	let tableHead: TTableHead;
+	const tableBody: Array<React.ReactElement> = [];
 
 	const toDelete = (headLine: number, headCell: number) =>
 		(headLine in headDelete) && (headCell in headDelete[headLine]) && (headDelete[headLine][headCell] === 1);
@@ -29,7 +32,7 @@ const Table = ({children, head, rotate, body} : { children?: React.ReactElement,
 		(headLine in headMerge) && (headCell in headMerge[headLine]) && (0 in headMerge[headLine][headCell]) ? headMerge[headLine][headCell][index] : undefined;
 
 	const p: Array<Array<React.ReactElement>> = [];
-	if (rotate) {
+	if (rotate) { // ======================== Если таблица развёрнута ==========================
 		headData.forEach((_, headLine) => {
 			headData[headLine].forEach((_, headCell) => {
 				if (!toDelete(headLine, headCell)) {
@@ -50,7 +53,7 @@ const Table = ({children, head, rotate, body} : { children?: React.ReactElement,
 			<tr className='head' key={`head${i}`} id={`head${i}`}>
 				{x.map((y) => y)}
 			</tr>);
-	} else {
+	} else { // ======================== Если таблица не развёрнута ===========================
 		tableHead = headData.map((_, headLine) =>
 			<tr className='head' key={`head${headLine}`} id={`head${headLine}`}>
 				{headData[headLine].map((_, headCell) => {
@@ -63,7 +66,19 @@ const Table = ({children, head, rotate, body} : { children?: React.ReactElement,
 						><b>{headLine}-{headCell}.{}</b> {parse(headData[headLine][headCell])}</td>;
 				})}
 			</tr>);
-	}
+			/*
+			tableBody = objMap(body, (line) =>
+				<tr className='body' key={`l${line}`}><td>{line}</td></tr>
+			);
+			*/
+			for (const line in body) {
+				const tds: Array<React.ReactElement> = [];
+				for (const field in fields) {
+					tds.push(<td key={field + line} id={field + line}>{body[line][field]}</td>);
+				}
+				tableBody.push(<tr className='body' key={`li${line}`} id={`li${line}`}>{tds}</tr>);
+			}
+	} // ============================ Конец неразвёрнутой таблицы ==========================
 
 	return (
       <table className="MainTable">
@@ -71,7 +86,8 @@ const Table = ({children, head, rotate, body} : { children?: React.ReactElement,
 			{tableHead}
 		</thead>
 		<tbody>
-			{children}
+			{tableBody}
+			{/* {children} */}
 		</tbody>
       </table>
     );
